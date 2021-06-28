@@ -103,6 +103,8 @@ const { animals } = require('./data/animals');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+app.use(express.static('public')); // gives access to all content in public folder 'express.static' is a middleware function
+
 // app.use() method is a form of middleware
 // it's a method executed by the Express.js server that mounts a funtion to the server that requests will pass through 
 
@@ -198,6 +200,23 @@ app.post('/api/animals', (req, res) => {
     res.json(animal);
   }
 });
+
+app.get('/', (req, res) => { // the '/' points to the root route of the server
+  res.sendFile(path.join(__dirname, './public/index.html')); // we're using the path module again to ensure that we're finding the correct location for the HTML code we want to display in the browser.
+});
+
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`API server now on port ${PORT}!`);
 });
